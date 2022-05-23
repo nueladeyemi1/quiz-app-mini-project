@@ -7,6 +7,11 @@
     font-size: 'poppins', sans-serif;
 }
 
+@viewport {
+    width: device-width;
+    zoom: 1.0;
+}
+
 body {
     background: #007bff;
 }
