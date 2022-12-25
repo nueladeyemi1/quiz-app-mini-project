@@ -103,12 +103,17 @@ const questionsAPI = async function () {
 
 questionsAPI();
 
-//Getting of questiona and options from the array of
+//Rendering questions and handling answers
+
+const decode = function (str) {
+  let txt = document.createElement('textarea');
+  txt.innerHTML = str;
+  return txt.value;
+}
 
 let correctAnswer;
 
 function showQuestions(index) {
-  console.log(index);
   const que_text = document.querySelector('.que_text');
 
   let que_tag = `<span>${index + 1}.  ${
@@ -123,12 +128,8 @@ function showQuestions(index) {
 
   incorrectOptions.splice(values - 1, 0, correctAnswer);
 
-  console.log(incorrectOptions[1]);
 
-  // for (let i = 0; i < incorrectOptions.length; i++) {
-  //   console.log(incorrectOptions[values]);
-  // }
-
+  console.log(correctAnswer);
   //New Options
   let option_tag = `<div class = "option"><span>
     ${incorrectOptions[0]}</span></div>
@@ -142,31 +143,7 @@ function showQuestions(index) {
     ${incorrectOptions[3]}
     </span></div>`;
 
-  //Former questions
-  // let que_tag1 =
-  //   '<span>' +
-  //   questions[index].numb +
-  //   '. ' +
-  //   questions[index].question +
-  //   '</span>';
 
-  ///
-  // for (let i = 0; i < questions.length; i++){
-  //     let option_tag = '<div class = "option"><span>'+ questions[index].options[i]+'</span></div>';
-  // }
-  // let option_tag1 =
-  //   '<div class = "option"><span>' +
-  //   questions[index].options[0] +
-  //   '</span></div>' +
-  //   '<div class = "option"><span>' +
-  //   questions[index].options[1] +
-  //   '</span></div>' +
-  //   '<div class = "option"><span>' +
-  //   questions[index].options[2] +
-  //   '</span></div>' +
-  //   '<div class = "option"><span>' +
-  //   questions[index].options[3] +
-  //   '</span></div>';
   que_text.innerHTML = que_tag;
   option_list.innerHTML = option_tag;
   const option = option_list.querySelectorAll('.option');
@@ -184,11 +161,10 @@ function optionSelected(answer) {
   clearInterval(counter);
   clearInterval(counterLine);
   let userAns = answer.textContent;
-  let correctAns = correctAnswer;
+  let correctAns = decode(correctAnswer);
 
-  console.log(userAns, correctAns, userAns === correctAns);
   let allOptions = option_list.children.length;
-  if (userAns === correctAns) {
+  if (userAns.trim() === correctAns.trim()) {
     userScore += 1;
     answer.classList.add('correct');
     console.log('The answer is correct');
@@ -225,7 +201,7 @@ function showResultBox() {
       '<span>and Congrats! You got <p>' +
       userScore +
       '</p> out of <p>' +
-      questions.length +
+      response.results.length +
       '</p></span>';
     scoreText.innerHTML = scoreTag;
   } else if (userScore > 1) {
@@ -233,7 +209,7 @@ function showResultBox() {
       '<span>and nice, you got only <p>' +
       userScore +
       '</p> out of <p>' +
-      questions.length +
+      response.results.length +
       '</p></span>';
     scoreText.innerHTML = scoreTag;
   } else {
@@ -241,7 +217,7 @@ function showResultBox() {
       '<span>and sorry, you got only <p>' +
       userScore +
       '</p> out of <p>' +
-      questions.length +
+      response.results.length +
       '</p></span>';
     scoreText.innerHTML = scoreTag;
   }
@@ -295,9 +271,7 @@ function queCounter(index) {
     '<span><p>' +
     index +
     '</p>of<p>' +
-    response.length +
+    response.results.length +
     '</p>Questions</span>';
   bottom_ques_counter.innerHTML = totalQuesCountTag;
 }
-
-//////
